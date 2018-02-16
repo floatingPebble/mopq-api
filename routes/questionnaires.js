@@ -22,4 +22,10 @@ router.put('/add', async function (req, res, next) {
   responder.sendResponse(res, responseFromFB);
 })
 
+router.post('/answers', async function (req, res, next) {
+  const responseFromDB = await questionnaires.getQuestionsWithAnswers(req.body);
+  responder.sendResponse(res, responseFromDB);
+})
+
+
 module.exports = router;

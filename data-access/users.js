@@ -16,6 +16,12 @@ class users {
     var response = await db.query(sqlCommand, values);
     return response;
   }
+
+  async getUsers() {
+    const sqlCommand = 'SELECT * FROM public.user WHERE "isAdmin" is NULL';
+    var response = await db.query(sqlCommand);
+    return response;
+  }
 }
 
 module.exports = new users();

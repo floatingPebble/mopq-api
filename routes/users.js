@@ -14,4 +14,9 @@ router.post('/login', async function(req, res, next) {
   responder.sendResponseFirstRow(res, responseFromDB);
 })
 
+router.get('/userlist', async function(req, res, next) {
+  const responseFromDB = await users.getUsers();
+  responder.sendResponse(res, responseFromDB);
+})
+
 module.exports = router;

@@ -158,6 +158,35 @@ class questionnaires {
     var response = await db.query(sqlCommand);
     return response;
   }
+
+  async getQuestionsWithAnswers(request) {
+    const questionsResponse = await this.getQuestionnaire(request.questionnaireId);
+
+    if(questionsResponse.isSuccess){
+      let sqlCommand = 'SELECT * FROM public.answer WHERE "questionnaireId" = $1 AND "userId" = $2';
+      const values = [request.questionnaireId, request.userId];
+
+      var answerResponse = await db.query(sqlCommand, values);
+
+      if(answerResponse.isSuccess) {
+        for(let i = 0; i < questionsResponse.data.length; i++) {
+          questionsResponse.data[i].answers = [];
+          questionsResponse.data[i].answer = '';
+
+          for(let j = 0; j < answerResponse.data.length; j++) {
+              if(answerResponse.data[j].questionId == questionsResponse.data[i].id){
+                if( questionsResponse.data[i].answerType == 2){
+                  questionsResponse.data[i].answers.push(answerResponse.data[j].text);
+                } else {
+                  questionsResponse.data[i].answer = answerResponse.data[j].text;
+                }               
+              }
+          }
+        }
+      }
+    }
+    return questionsResponse;
+  }
 }
 
 
